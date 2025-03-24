@@ -43,7 +43,7 @@ async function  testConnexion() {
 
 async function getFilms() {
   try{
-    const [resultat] = await pool.query('SELECT * FROM films')
+    const [resultat] = await pool.query('SELECT * FROM films F INNER JOIN genres G on F.genre_id=G.id')
     console.log(resultat) // Afficher dans la console la liste des films
     return(resultat) // Retourne une promesse
   }catch (error) {
