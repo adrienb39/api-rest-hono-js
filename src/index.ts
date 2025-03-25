@@ -89,3 +89,17 @@ app.get('/api/films/:id', async (c) => {
     return c.json({ message: 'Erreur lors de la récupération des détails du film.' }, 500);
   }
 });
+
+app.get('/api/films/:id/seances', async (c) => {
+  const filmId = c.req.param('id');
+  try {
+    const [seances] = await pool.query(
+      'SELECT seances.id, seances.date, seances.heure, seances.places_disponibles FROM seances WHERE seances.film_id = ?',
+      [filmId]
+    );
+    return c.json({ status: 'success', data: seances });
+  } catch (error) {
+    console.error(error);
+    return c.json({ message: 'Erreur lors de la récupération des séances.' }, 500);
+  }
+});
