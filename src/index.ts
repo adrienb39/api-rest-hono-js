@@ -75,3 +75,17 @@ app.get('/api/films', async (c) => {
     return c.json({ message: 'Une erreur est survenue lors de la récupération des films.' }, 500);
   }
 });
+
+app.get('/api/films/:id', async (c) => {
+  const filmId = c.req.param('id');
+  try {
+    const [resultat] = await pool.query(
+      'SELECT films.*, genres.nom AS genre_nom FROM films LEFT JOIN genres ON films.genre_id = genres.id WHERE films.id = ?',
+      [filmId]
+    );
+    return c.json({ status: 'success', data: resultat[0] });
+  } catch (error) {
+    console.error(error);
+    return c.json({ message: 'Erreur lors de la récupération des détails du film.' }, 500);
+  }
+});
